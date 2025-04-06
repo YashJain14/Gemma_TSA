@@ -1,0 +1,9 @@
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+Traceback (most recent call last):
+  File "/home/UG/yash012/Gemma_TSA/pipeline/compare_transformers.py", line 6, in <module>
+    from utils.trainer import CustomTrainer
+  File "/home/UG/yash012/Gemma_TSA/utils/trainer.py", line 29, in <module>
+    training_args = TrainingArguments(
+                    ^^^^^^^^^^^^^^^^^^
+TypeError: TrainingArguments.__init__() got an unexpected keyword argument 'evaluation_strategy'

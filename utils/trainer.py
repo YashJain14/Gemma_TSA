@@ -6,8 +6,8 @@ import wandb
 import numpy as np # Import numpy for argmax
 
 # Check if WANDB env vars are set, provide defaults if not
-WANDB_ENTITY = os.environ.get("WANDB_ENTITY", "your_entity") # Default or your W&B username/team
-WANDB_PROJECT = os.environ.get("WANDB_PROJECT", "text-sentiment-comparison") # Default project name
+WANDB_ENTITY = os.environ.get("WANDB_ENTITY", "yashjain14-nanyang-technological-university-singapore-org") # Default or your W&B username/team
+WANDB_PROJECT = os.environ.get("WANDB_PROJECT", "NNDL") # Default project name
 if WANDB_ENTITY == "your_entity":
     print("Warning: WANDB_ENTITY environment variable not set. Using default 'your_entity'.")
 

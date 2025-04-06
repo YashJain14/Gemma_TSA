@@ -17,7 +17,7 @@ mkdir -p slurm_out
 module purge ; module load anaconda ; source activate llm_env # Activate env
 export WANDB_API_KEY="75a3e7bc92541ff598fabcf666d5e781e5f84156" # !! EDIT THIS !!
 # Ensure you are logged into Hugging Face IF NEEDED for Llama access
-# export HF_TOKEN="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" # Optional: If needed
+
 cd "${SLURM_SUBMIT_DIR}"
 
 # --- Experiment Specifics ---

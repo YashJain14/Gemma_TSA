@@ -1,0 +1,28 @@
+Job started on TC1N07 at Sun Apr  6 11:20:39 PM +08 2025
+Job Name: cmp_rob_imdb
+Job ID: 28598
+Running Command: deepspeed --num_gpus=1 pipeline/compare_transformers.py  --model roberta --dataset imdb --num_epochs 3 --local_rank=-1
+[2025-04-06 23:20:43,833] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-06 23:20:52,596] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=0 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
+[2025-04-06 23:20:52,596] [INFO] [runner.py:605:main] cmd = /home/UG/yash012/.conda/envs/llm_env/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMF19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None pipeline/compare_transformers.py --model roberta --dataset imdb --num_epochs 3 --local_rank=-1
+[2025-04-06 23:20:54,374] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-06 23:20:58,538] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0]}
+[2025-04-06 23:20:58,538] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=1, node_rank=0
+[2025-04-06 23:20:58,538] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0]})
+[2025-04-06 23:20:58,538] [INFO] [launch.py:164:main] dist_world_size=1
+[2025-04-06 23:20:58,539] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0
+[2025-04-06 23:20:58,540] [INFO] [launch.py:256:main] process 2163579 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=0', '--model', 'roberta', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1']
+[2025-04-06 23:21:07,584] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+W&B login successful.
+Namespace(dataset='imdb', model='roberta', subset_yelp=False, subset_size=25000, num_epochs=3, local_rank=-1)
+Loading model: roberta-base
+Tokenizing column 'text' with tokenizer 'roberta-base' (padding_side='right')
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Starting training...
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mroberta-CompareTransformers-imdb[0m at: [34mhttps://wandb.ai/yashjain14-nanyang-technological-university-singapore/huggingface/runs/zqmdungy[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20250406_232350-zqmdungy/logs[0m
+[2025-04-06 23:23:56,561] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2163579
+[2025-04-06 23:23:56,561] [ERROR] [launch.py:325:sigkill_handler] ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=0', '--model', 'roberta', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1'] exits with return code = 1
+Job finished with exit code 1 at Sun Apr  6 11:23:58 PM +08 2025

@@ -36,7 +36,7 @@ training_args = TrainingArguments(
     weight_decay=0.01,                # strength of weight decay
     logging_dir='./logs',             # directory for storing logs
     logging_steps=10,                 # log metrics every X steps
-    evaluation_strategy="steps",      # evaluate validation set during training
+    eval_strategy="steps",            # evaluate validation set during training 
     eval_steps=100,                   # evaluate every X steps
     save_strategy="steps",            # save checkpoint during training
     save_steps=100,                   # save checkpoint every X steps
@@ -128,7 +128,7 @@ class CustomTrainer(Trainer):
                  run_name: str = None,
                  trainer_args: TrainingArguments = None,
                  num_train_epochs: int = None, # Allow overriding epochs
-                 tokenizer: PreTrainedTokenizerBase = None, # Add tokenizer
+                 tokenizer: PreTrainedTokenizerBase = None, # Will be deprecated in future versions
                  **kwargs):
 
         # Set default training arguments if not supplied
@@ -145,16 +145,19 @@ class CustomTrainer(Trainer):
             os.environ["WANDB_RUN_NAME"] = run_name
 
         # Initialize the Trainer
+        # Note: 'tokenizer' will be deprecated in future versions, consider updating in the future
+        # to use 'processing_class' instead when the library fully transitions
         super().__init__(*args,
                          args=current_args,
                          compute_metrics=compute_metrics,
-                         tokenizer=tokenizer, # Pass tokenizer to base Trainer
+                         tokenizer=tokenizer, # Will be deprecated in future
                          **kwargs)
 
-    def compute_loss(self, model, inputs, return_outputs=False):
+    def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
         """
         Override compute_loss to use CrossEntropyLoss.
         Handles models that might return loss directly or require manual calculation.
+        Added num_items_in_batch parameter to match parent class signature in newer versions.
         """
         if "labels" not in inputs:
              raise ValueError("Input dictionary must contain 'labels' for loss computation.")

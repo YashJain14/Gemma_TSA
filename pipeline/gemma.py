@@ -1,40 +1,40 @@
 import sys, pathlib; sys.path.append(str(pathlib.Path(__file__).parents[1]))
-
 import argparse
 import json
-import os
-
 import deepspeed
 import wandb
 import torch
 from torch.utils.data import DataLoader
-
 from tqdm import tqdm
-
 from datasets import load_dataset
-from transformers import EvalPrediction
+from transformers import EvalPrediction, AutoTokenizer
 
+# Import the specific sliced model and its loss function
 from models.SlicedGemma import SlicedGemma, compute_loss
 from utils.preprocessing import tokenize, train_val_test_split, subset_dataset
-from utils.trainer import compute_metrics
+from utils.trainer import compute_metrics # For validation metrics
 
 NUM_EPOCH = 3
+MODEL_NAME = "google/gemma-2b" # Specify base model
 
 def main():
     parser = argparse.ArgumentParser(description='Sliced Gemma model experiment')
     parser.add_argument("--dataset", choices=['imdb', 'yelp'], default='imdb', help="Dataset to use")
-    parser.add_argument("--model_name", type=str, default="meta-llama/Llama-3.2-1B", help="Model name or path")
-    parser.add_argument("--subset", action="store_true", help="Whether to subset the dataset")
-    parser.add_argument("--subset_size", type=int, default=25000, help="Size of dataset subset")
-    
+    parser.add_argument("--subset_yelp", action='store_true', help='Whether to subset the yelp dataset')
+    parser.add_argument("--subset_size", type=int, default=25000, help="Size for subsetting train/val/test")
+    parser.add_argument("--ds_config", type=str, default="ds_config_gemma.json", help="DeepSpeed config file")
+    parser.add_argument("--val_interval", type=int, default=500, help="Steps between validation checks")
+    parser.add_argument("--model_name", type=str, default=MODEL_NAME, help="Base model identifier")
+
     # for deepspeed
-    parser.add_argument("--local_rank", type=int, default=0)
+    parser.add_argument("--local_rank", type=int, default=-1, help="Local rank for distributed training")
 
     args = parser.parse_args()
 
-    print(f"Running with arguments: {args}")
+    print(args)
 
-    # set up dataset
+    # --- Set up Dataset ---
+    input_col_name = "text"
     if args.dataset == 'imdb':
         dataset = load_dataset("imdb")
         num_labels = 2
@@ -42,257 +42,178 @@ def main():
         dataset = load_dataset("yelp_review_full")
         num_labels = 5
     else:
-        raise NotImplementedError(f"Dataset {args.dataset} is not implemented")
+        raise NotImplementedError(f"Dataset {args.dataset} not supported.")
 
-    print(f"Dataset {args.dataset} loaded")
+    # --- Load Tokenizer ---
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        print(f"Set pad token to EOS token: {tokenizer.pad_token}")
+    # Gemma uses last token, ensure left padding for consistency if batching
+    tokenizer.padding_side = 'left'
+    print(f"Set padding side to left")
 
-    # set up model
-    ds_config_path = "ds_config_gemma.json"
-    if not os.path.exists(ds_config_path):
-        # If gemma config doesn't exist, use llama config
-        ds_config_path = "ds_config_llama.json"
-    
-    with open(ds_config_path, "r") as f:
-        ds_config = json.load(f)
-    
+
+    # --- Set up Sliced Model ---
+    print(f"Initializing SlicedGemma with base model: {args.model_name}")
     model = SlicedGemma(model_name=args.model_name, num_labels=num_labels)
-    model_engine, _, _, _ = deepspeed.initialize(
+
+    # --- DeepSpeed Initialization ---
+    print(f"Loading DeepSpeed config from: {args.ds_config}")
+    with open(args.ds_config, "r") as f:
+        df_config = json.load(f)
+
+    # Filter model parameters to train only classification layers
+    trainable_params = [p for n, p in model.named_parameters() if p.requires_grad]
+    print(f"Number of trainable parameters: {sum(p.numel() for p in trainable_params)}")
+
+    model_engine, optimizer, _, _ = deepspeed.initialize(
         model=model,
-        model_parameters=model.parameters(),
-        config=ds_config
+        model_parameters=trainable_params, # Pass only trainable params
+        config=df_config
     )
-    
-    # set up dataset
-    tokenizer_name = args.model_name
-    print(f"Tokenizing dataset with {tokenizer_name}")
-    tokenized_datasets = tokenize(dataset, tokenizer_name)
+    print(f"DeepSpeed initialized on rank {model_engine.local_rank}")
+
+
+    # --- Prepare Datasets ---
+    tokenized_datasets = tokenize(dataset, tokenizer, input_col_name=input_col_name)
     train_dataset, val_dataset, test_dataset = train_val_test_split(tokenized_datasets)
 
-    if args.subset or args.dataset == 'yelp':
-        # Subset for faster training or if yelp (which is large)
-        subset_size = args.subset_size
-        print(f"Subsetting datasets to {subset_size} examples")
-        train_dataset = subset_dataset(train_dataset, size=subset_size, seed=42)
-        val_dataset = subset_dataset(val_dataset, size=subset_size//5, seed=42)
-        test_dataset = subset_dataset(test_dataset, size=subset_size//5, seed=42)
+    if args.dataset == 'yelp' and args.subset_yelp:
+        print(f"Subsetting Yelp dataset to size: {args.subset_size}")
+        train_dataset = subset_dataset(train_dataset, size=args.subset_size, seed=42)
+        val_dataset = subset_dataset(val_dataset, size=args.subset_size, seed=42)
+        test_dataset = subset_dataset(test_dataset, size=args.subset_size, seed=42)
 
-    # set up dataloader
-    train_dataloader = DataLoader(train_dataset, batch_size=ds_config["train_batch_size"])
-    val_dataloader = DataLoader(val_dataset, batch_size=ds_config["train_batch_size"])
-    test_dataloader = DataLoader(test_dataset, batch_size=ds_config["train_batch_size"])
+    # --- Set up Dataloaders ---
+    # Use micro batch size from deepspeed config if available, else use train_batch_size
+    batch_size = df_config.get("train_micro_batch_size_per_gpu", df_config["train_batch_size"])
+    print(f"Using batch size: {batch_size}")
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size)
+    val_dataloader = DataLoader(val_dataset, batch_size=batch_size)
+    # test_dataloader = DataLoader(test_dataset, batch_size=batch_size) # Test evaluation can be done separately
 
-    # Get model name for run name
-    model_short_name = args.model_name.split("/")[-1]
-    
-    # start wandb tracking
-    run_name = f"Sliced {model_short_name} - {args.dataset}"
-    if args.subset:
-        run_name += f" - subset {args.subset_size}"
-        
+    # --- W&B Tracking ---
+    run_name = f"Sliced-{args.model_name.split('/')[-1]}-{args.dataset}"
+    if args.subset_yelp:
+         run_name += f"_subset{args.subset_size}"
+
     if model_engine.global_rank == 0:
         wandb.init(
-            project="text-sentiment-analysis",
+            project="text-sentiment-analysis-sliced", # Maybe a new project name
+            entity="sc4001", # Replace with your entity
             name=run_name,
-            config={
-                "model": args.model_name,
-                "dataset": args.dataset,
-                "num_epochs": NUM_EPOCH,
-                "batch_size": ds_config["train_batch_size"],
-                "subset": args.subset,
-                "subset_size": args.subset_size if args.subset else "full"
-            }
+            config=df_config # Log deepspeed config
         )
+        wandb.config.update(vars(args)) # Log script arguments
+        wandb.config.update({"num_layers": model.num_layers, "hidden_dim": model.hidden_dimension})
 
+    # --- Training Loop ---
+    global_step = 0
     for epoch in range(NUM_EPOCH):
         if model_engine.global_rank == 0:
             print(f"Epoch {epoch + 1}/{NUM_EPOCH}")
 
-        # Training loop
-        model_engine.train()
-        for step, batch in enumerate(tqdm(train_dataloader, desc=f"Training Epoch {epoch+1}")):
-            input_ids = batch['input_ids'].to(model_engine.device)
-            attention_mask = batch['attention_mask'].to(model_engine.device)
-            labels = batch['label'].to(model_engine.device)
+        model_engine.train() # Set model to train mode
+        pbar = tqdm(train_dataloader, desc=f"Epoch {epoch+1}", disable=(model_engine.global_rank != 0))
+        for step, batch in enumerate(pbar):
+            # Move batch to current device
+            input_ids = batch['input_ids'].to(model_engine.local_rank)
+            attention_mask = batch['attention_mask'].to(model_engine.local_rank)
+            labels = batch['label'].to(model_engine.local_rank)
 
-            # forward
-            all_output_logits = model_engine(input_ids=input_ids, 
-                                            attention_mask=attention_mask)
+            # Forward pass
+            all_output_logits = model_engine(input_ids=input_ids,
+                                             attention_mask=attention_mask)
 
-            # compute loss
-            summed_loss, all_layer_loss = compute_loss(
-                all_layer_logits=all_output_logits, 
+            # Compute loss (mean loss across layers for backward, per-layer loss for logging)
+            mean_loss, all_layer_loss = compute_loss(
+                all_layer_logits=all_output_logits,
                 labels=labels,
-                num_layers=model.num_layers, 
-                num_labels=model.num_labels
+                num_labels=model.num_labels,
+                num_layers=model.num_layers
             )
 
-            # backward propagation
-            model_engine.backward(summed_loss)
+            # Backward propagation
+            model_engine.backward(mean_loss)
 
-            # weight update
+            # Weight update (DeepSpeed handles optimizer steps)
             model_engine.step()
 
-            # prepare wandb logs
-            wandb_log = {"train/step": step + epoch * len(train_dataloader)}
+            # --- Logging ---
+            wandb_log = {"train/mean_loss": mean_loss.item()}
             for i in range(model.num_layers):
-                wandb_log[f"train/loss_layer_{i+1}"] = all_layer_loss[i].item()
+                wandb_log[f"train_loss/layer_{i+1}"] = all_layer_loss[i].item()
 
-            # Validation loop - run periodically during training
-            if step % 500 == 0:
-                model_engine.eval()
-                
-                # Collect predictions and labels for all validation batches
-                all_labels = []
-                all_layer_predictions = [[] for _ in range(model.num_layers)]
-                
+            pbar.set_postfix({"Loss": mean_loss.item()})
+
+            ########### Validation ###########
+            if global_step > 0 and global_step % args.val_interval == 0:
+                model_engine.eval() # Set model to eval mode
+                all_labels_val = []
+                all_layer_logits_val = [] # List to store logits tensor for each batch
+
                 with torch.no_grad():
-                    for val_batch in tqdm(val_dataloader, desc="Validation"):
-                        val_input_ids = val_batch['input_ids'].to(model_engine.device)
-                        val_attention_mask = val_batch['attention_mask'].to(model_engine.device)
-                        val_labels = val_batch['label'].to(model_engine.device)
-                        
+                    for val_batch in val_dataloader:
+                        input_ids_val = val_batch['input_ids'].to(model_engine.local_rank)
+                        attention_mask_val = val_batch['attention_mask'].to(model_engine.local_rank)
+                        labels_val = val_batch['label'] # Keep labels on CPU for easier gathering
+
                         # Forward pass
-                        layer_logits = model_engine(
-                            input_ids=val_input_ids,
-                            attention_mask=val_attention_mask
-                        )
-                        
-                        # Store predictions from each layer
-                        for layer_idx in range(model.num_layers):
-                            all_layer_predictions[layer_idx].append(layer_logits[layer_idx].cpu())
-                        
-                        # Store labels
-                        all_labels.append(val_labels.cpu())
-                
-                # Concatenate all batches
-                all_labels = torch.cat(all_labels)
-                all_layer_logits = [torch.cat(layer_preds) for layer_preds in all_layer_predictions]
-                
-                # Compute metrics for each layer
-                for layer_idx in range(model.num_layers):
-                    layer_logits = all_layer_logits[layer_idx]
-                    
-                    # Compute loss
-                    layer_loss = F.cross_entropy(layer_logits, all_labels.long())
-                    wandb_log[f"val/loss_layer_{layer_idx+1}"] = layer_loss.item()
-                    
-                    # Compute other metrics
-                    pred = EvalPrediction(
-                        predictions=layer_logits.numpy(),
-                        label_ids=all_labels.numpy()
-                    )
-                    metrics = compute_metrics(pred)
-                    
-                    for metric_name, value in metrics.items():
-                        wandb_log[f"val/{metric_name}_layer_{layer_idx+1}"] = value
-                
-                # Print validation results
-                if model_engine.global_rank == 0:
-                    print(f"Validation - Step {step} - Epoch {epoch+1}")
-                    best_layer = 0
-                    best_accuracy = 0
-                    for layer_idx in range(model.num_layers):
-                        acc = wandb_log[f"val/accuracy_layer_{layer_idx+1}"]
-                        if acc > best_accuracy:
-                            best_accuracy = acc
-                            best_layer = layer_idx
-                    print(f"Best layer: {best_layer+1} with accuracy: {best_accuracy:.4f}")
-                
-                # Switch back to training mode
+                        logits_val = model_engine(input_ids=input_ids_val,
+                                                  attention_mask=attention_mask_val) # (num_layers, batch_size, num_labels)
+
+                        all_labels_val.append(labels_val)
+                        all_layer_logits_val.append(logits_val.cpu()) # Move logits to CPU
+
+                # Concatenate results from all validation batches
+                all_labels_tensor = torch.cat(all_labels_val, dim=0) # (total_val_samples,)
+                all_layer_logits_tensor = torch.cat(all_layer_logits_val, dim=1) # (num_layers, total_val_samples, num_labels)
+
+                # Compute validation loss
+                _, all_layer_val_loss = compute_loss(
+                    all_layer_logits=all_layer_logits_tensor,
+                    labels=all_labels_tensor,
+                    num_labels=model.num_labels,
+                    num_layers=model.num_layers
+                )
+
+                # Prepare wandb logs for validation loss
+                for i in range(model.num_layers):
+                    wandb_log[f"eval_loss/layer_{i+1}_loss"] = all_layer_val_loss[i].item()
+
+                # Compute validation metrics for each layer
+                for i in range(model.num_layers):
+                    # Ensure labels are LongTensor for metrics
+                    pred = EvalPrediction(predictions=all_layer_logits_tensor[i].numpy(),
+                                          label_ids=all_labels_tensor.long().numpy())
+                    metrics = compute_metrics(pred=pred)
+
+                    # Prepare wandb logs for validation metrics
+                    for key, value in metrics.items():
+                        wandb_log[f"eval_{key}/layer_{i+1}"] = value
+
+                # Set back to train mode
                 model_engine.train()
-                
-                # Save checkpoint
-                if step % 1000 == 0:
-                    save_dir = f"checkpoints/{model_short_name}_{args.dataset}"
-                    if not os.path.exists(save_dir):
-                        os.makedirs(save_dir, exist_ok=True)
-                    model_engine.save_checkpoint(save_dir=save_dir)
-            
-            # Log to wandb
+
+
+            ########### Save Checkpoint (Optional) ###########
+            # if global_step > 0 and global_step % args.save_interval == 0:
+            #     tag = f"step_{global_step}"
+            #     model_engine.save_checkpoint(save_dir="checkpoints", tag=tag)
+
+            # Log to wandb (only on rank 0)
             if model_engine.global_rank == 0:
-                wandb.log(wandb_log)
-    
-    # Final evaluation on test set
-    model_engine.eval()
-    
-    # Collect predictions and labels for all test batches
-    all_test_labels = []
-    all_test_layer_predictions = [[] for _ in range(model.num_layers)]
-    
-    with torch.no_grad():
-        for test_batch in tqdm(test_dataloader, desc="Test Evaluation"):
-            test_input_ids = test_batch['input_ids'].to(model_engine.device)
-            test_attention_mask = test_batch['attention_mask'].to(model_engine.device)
-            test_labels = test_batch['label'].to(model_engine.device)
-            
-            # Forward pass
-            layer_logits = model_engine(
-                input_ids=test_input_ids,
-                attention_mask=test_attention_mask
-            )
-            
-            # Store predictions from each layer
-            for layer_idx in range(model.num_layers):
-                all_test_layer_predictions[layer_idx].append(layer_logits[layer_idx].cpu())
-            
-            # Store labels
-            all_test_labels.append(test_labels.cpu())
-    
-    # Concatenate all batches
-    all_test_labels = torch.cat(all_test_labels)
-    all_test_layer_logits = [torch.cat(layer_preds) for layer_preds in all_test_layer_predictions]
-    
-    # Compute metrics for each layer
-    final_results = {}
-    for layer_idx in range(model.num_layers):
-        layer_logits = all_test_layer_logits[layer_idx]
-        
-        # Compute loss
-        layer_loss = F.cross_entropy(layer_logits, all_test_labels.long())
-        final_results[f"test/loss_layer_{layer_idx+1}"] = layer_loss.item()
-        
-        # Compute other metrics
-        pred = EvalPrediction(
-            predictions=layer_logits.numpy(),
-            label_ids=all_test_labels.numpy()
-        )
-        metrics = compute_metrics(pred)
-        
-        for metric_name, value in metrics.items():
-            final_results[f"test/{metric_name}_layer_{layer_idx+1}"] = value
-    
-    # Log final results
+                 wandb.log(wandb_log, step=global_step)
+
+            global_step += 1
+
+
+    # --- End W&B Tracking ---
     if model_engine.global_rank == 0:
-        wandb.log(final_results)
-        
-        # Find best layer
-        best_layer = 0
-        best_accuracy = 0
-        for layer_idx in range(model.num_layers):
-            acc = final_results[f"test/accuracy_layer_{layer_idx+1}"]
-            if acc > best_accuracy:
-                best_accuracy = acc
-                best_layer = layer_idx
-        
-        # Add summary metrics
-        summary = {
-            "test_best_layer": best_layer + 1,
-            "test_best_accuracy": best_accuracy
-        }
-        for key, value in summary.items():
-            wandb.run.summary[key] = value
-        
-        print("\nTest Results Summary:")
-        print(f"Best Layer: {best_layer + 1}")
-        print(f"Best Accuracy: {best_accuracy:.4f}")
-        
-        # Save final model
-        save_dir = f"checkpoints/{model_short_name}_{args.dataset}_final"
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir, exist_ok=True)
-        model_engine.save_checkpoint(save_dir=save_dir)
-        
         wandb.finish()
+    print("Training finished.")
+
 
 if __name__ == "__main__":
     main()

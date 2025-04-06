@@ -10,22 +10,21 @@ from datasets import load_dataset
 from transformers import EvalPrediction, AutoTokenizer
 
 # Import the specific sliced model and its loss function
-from models.SlicedRoberta import SlicedRoberta, compute_loss
+from models.SlicedLlama3_2 import SlicedLlama3_2, compute_loss
 from utils.preprocessing import tokenize, train_val_test_split, subset_dataset
 from utils.trainer import compute_metrics # For validation metrics
 
 NUM_EPOCH = 3
-MODEL_NAME = "roberta-base" # Specify base model
+MODEL_NAME = "meta-llama/Llama-3.2-8B-Instruct" # Specify base model
 
 def main():
-    parser = argparse.ArgumentParser(description='Sliced RoBERTa model experiment')
+    parser = argparse.ArgumentParser(description='Sliced Llama-3.2 model experiment')
     parser.add_argument("--dataset", choices=['imdb', 'yelp'], default='imdb', help="Dataset to use")
     parser.add_argument("--subset_yelp", action='store_true', help='Whether to subset the yelp dataset')
     parser.add_argument("--subset_size", type=int, default=25000, help="Size for subsetting train/val/test")
-    parser.add_argument("--ds_config", type=str, default="ds_config_roberta.json", help="DeepSpeed config file")
+    parser.add_argument("--ds_config", type=str, default="ds_config_llama3_2.json", help="DeepSpeed config file")
     parser.add_argument("--val_interval", type=int, default=500, help="Steps between validation checks")
     parser.add_argument("--model_name", type=str, default=MODEL_NAME, help="Base model identifier")
-
 
     # for deepspeed
     parser.add_argument("--local_rank", type=int, default=-1, help="Local rank for distributed training")
@@ -47,25 +46,30 @@ def main():
 
     # --- Load Tokenizer ---
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
-    # RoBERTa generally doesn't need pad token handling like causal LMs
-    # tokenizer.padding_side = 'right' # Default is usually right for RoBERTa
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        print(f"Set pad token to EOS token: {tokenizer.pad_token}")
+    # Llama uses last token, ensure left padding for consistency if batching
+    tokenizer.padding_side = 'left'
+    print(f"Set padding side to left")
 
 
     # --- Set up Sliced Model ---
-    print(f"Initializing SlicedRoberta with base model: {args.model_name}")
-    model = SlicedRoberta(model_name=args.model_name, num_labels=num_labels)
+    print(f"Initializing SlicedLlama3_2 with base model: {args.model_name}")
+    model = SlicedLlama3_2(model_name=args.model_name, num_labels=num_labels)
 
     # --- DeepSpeed Initialization ---
     print(f"Loading DeepSpeed config from: {args.ds_config}")
     with open(args.ds_config, "r") as f:
         df_config = json.load(f)
 
+    # Filter model parameters to train only classification layers
     trainable_params = [p for n, p in model.named_parameters() if p.requires_grad]
     print(f"Number of trainable parameters: {sum(p.numel() for p in trainable_params)}")
 
     model_engine, optimizer, _, _ = deepspeed.initialize(
         model=model,
-        model_parameters=trainable_params,
+        model_parameters=trainable_params, # Pass only trainable params
         config=df_config
     )
     print(f"DeepSpeed initialized on rank {model_engine.local_rank}")
@@ -191,6 +195,7 @@ def main():
     if model_engine.global_rank == 0:
         wandb.finish()
     print("Training finished.")
+
 
 if __name__ == "__main__":
     main()

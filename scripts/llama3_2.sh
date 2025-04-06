@@ -11,11 +11,13 @@ MASTER_PORT=$((RANDOM % 10000 + 20000))
 DATASET="imdb" # imdb or yelp
 SUBSET_YELP="false" # true or false
 SUBSET_SIZE=25000
-DS_CONFIG="ds_config_gemma.json"
-MODEL_NAME="google/gemma-2b" # Or gemma-7b if you have resources
+DS_CONFIG="ds_config_llama3_2.json"
+MODEL_NAME="meta-llama/Llama-3.2-8B-Instruct" # Requires access
+
+# Make sure you are logged in: huggingface-cli login
 
 CMD="deepspeed --include localhost:$GPUS --master_port $MASTER_PORT \
-    pipeline/gemma.py \
+    pipeline/llama3_2.py \
     --model_name $MODEL_NAME \
     --dataset $DATASET \
     --ds_config $DS_CONFIG \
@@ -25,6 +27,6 @@ if [[ "$DATASET" == "yelp" && "$SUBSET_YELP" == "true" ]]; then
   CMD+=" --subset_yelp --subset_size $SUBSET_SIZE"
 fi
 
-echo "Running Gemma Slicing:"
+echo "Running Llama-3.2 Slicing:"
 echo $CMD
 eval $CMD

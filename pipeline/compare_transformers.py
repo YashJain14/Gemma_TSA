@@ -9,8 +9,8 @@ from utils.preprocessing import tokenize, train_val_test_split, subset_dataset
 # Mapping from user-friendly names to Hugging Face model identifiers
 MODEL_MAP = {
     "roberta": "roberta-base",
-    "gemma": "google/gemma-2b", # Using 2b as 3.1b is PT only
-    "llama3_2": "meta-llama/Llama-3.2-8B-Instruct" # Using 8B instruct as 1B is not available
+    "gemma": "google/gemma-3-1b-it", # Using 2b as 3.1b is PT only
+    "llama3_2": "meta-llama/Llama-3.2-1B" # Using 8B instruct as 1B is not available
     # Add other models here if needed
 }
 # Note: For Llama/Gemma classification, tokenizer padding side might be important

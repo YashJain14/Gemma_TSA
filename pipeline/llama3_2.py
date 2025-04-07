@@ -15,7 +15,7 @@ from utils.preprocessing import tokenize, train_val_test_split, subset_dataset
 from utils.trainer import compute_metrics # For validation metrics
 
 NUM_EPOCH = 3
-MODEL_NAME = "meta-llama/Llama-3.2-8B-Instruct" # Specify base model
+MODEL_NAME = "meta-llama/Llama-3.2-1B" # Specify base model
 
 def main():
     parser = argparse.ArgumentParser(description='Sliced Llama-3.2 model experiment')

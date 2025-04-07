@@ -25,7 +25,7 @@ EXPERIMENT_TYPE="slice"
 MODEL_KEY="llama3_2" # Uses meta-llama/Llama-3.2-8B-Instruct
 DATASET="imdb"
 PYTHON_SCRIPT="pipeline/llama3_2.py"
-MODEL_HF_ID="meta-llama/Llama-3.2-8B-Instruct"
+MODEL_HF_ID="meta-llama/Llama-3.2-1B"
 DS_CONFIG_FILE="ds_config_llama3_2.json"
 EXTRA_ARGS=" --model_name $MODEL_HF_ID --dataset $DATASET --ds_config $DS_CONFIG_FILE"
 

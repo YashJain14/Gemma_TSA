@@ -24,7 +24,7 @@ EXPERIMENT_TYPE="slice"
 MODEL_KEY="gemma"
 DATASET="imdb"
 PYTHON_SCRIPT="pipeline/gemma.py"
-MODEL_HF_ID="google/gemma-2b"
+MODEL_HF_ID="google/gemma-3-1b-it"
 DS_CONFIG_FILE="ds_config_gemma.json"
 EXTRA_ARGS=" --model_name $MODEL_HF_ID --dataset $DATASET --ds_config $DS_CONFIG_FILE"
 

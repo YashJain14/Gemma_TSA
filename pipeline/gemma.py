@@ -15,7 +15,7 @@ from utils.preprocessing import tokenize, train_val_test_split, subset_dataset
 from utils.trainer import compute_metrics # For validation metrics
 
 NUM_EPOCH = 3
-MODEL_NAME = "google/gemma-2b" # Specify base model
+MODEL_NAME = "google/gemma-3-1b-it" # Specify base model
 
 def main():
     parser = argparse.ArgumentParser(description='Sliced Gemma model experiment')

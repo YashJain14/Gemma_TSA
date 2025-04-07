@@ -5,7 +5,7 @@ import numpy as np
 from transformers import GemmaModel, AutoConfig
 
 class SlicedGemma(nn.Module):
-    def __init__(self, model_name: str = "google/gemma-2b", num_labels: int = 2):
+    def __init__(self, model_name: str = "google/gemma-3-1b-it", num_labels: int = 2):
         super(SlicedGemma, self).__init__()
 
         self.model_name = model_name

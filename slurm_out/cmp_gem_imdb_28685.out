@@ -1,0 +1,6 @@
+Job started on TC1N02 at Mon Apr  7 02:08:39 PM +08 2025
+Job Name: cmp_gem_imdb
+Job ID: 28685
+Running Command: deepspeed --num_gpus=1 pipeline/compare_transformers.py  --model gemma --dataset imdb --num_epochs 3 --local_rank=-1
+[2025-04-07 14:08:51,124] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Job finished with exit code 1 at Mon Apr  7 02:08:58 PM +08 2025

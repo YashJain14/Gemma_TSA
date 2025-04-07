@@ -12,7 +12,7 @@ DATASET="imdb" # imdb or yelp
 SUBSET_YELP="false" # true or false
 SUBSET_SIZE=25000
 DS_CONFIG="ds_config_llama3_2.json"
-MODEL_NAME="meta-llama/Llama-3.2-8B-Instruct" # Requires access
+MODEL_NAME="meta-llama/Llama-3.2-1B" # Requires access
 
 # Make sure you are logged in: huggingface-cli login
 

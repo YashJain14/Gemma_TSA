@@ -1,0 +1,19 @@
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/UG/yash012/Gemma_TSA/pipeline/compare_transformers.py", line 155, in <module>
+[rank0]:     main()
+[rank0]:   File "/home/UG/yash012/Gemma_TSA/pipeline/compare_transformers.py", line 67, in main
+[rank0]:     model = AutoModelForSequenceClassification.from_pretrained(
+[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
+[rank0]:     return model_class.from_pretrained(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
+[rank0]:     model = cls(config, *model_args, **model_kwargs)
+[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: TypeError: Gemma2ForSequenceClassification.__init__() got an unexpected keyword argument 'gradient_checkpointing'
+[rank0]:[W407 15:36:48.281058049 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())

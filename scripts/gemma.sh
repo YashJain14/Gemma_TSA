@@ -12,14 +12,16 @@ DATASET="imdb" # imdb or yelp
 SUBSET_YELP="false" # true or false
 SUBSET_SIZE=25000
 DS_CONFIG="ds_config_gemma.json"
-MODEL_NAME="google/gemma-3-1b-it" # Or gemma-7b if you have resources
+MODEL_NAME="google/gemma-2-2b-it" # Or gemma-7b if you have resources
 
 CMD="deepspeed --include localhost:$GPUS --master_port $MASTER_PORT \
     pipeline/gemma.py \
     --model_name $MODEL_NAME \
     --dataset $DATASET \
     --ds_config $DS_CONFIG \
-    --local_rank" # local_rank passed automatically
+    --local_rank
+    --quantize 4bit
+    --lora_r 16"
 
 if [[ "$DATASET" == "yelp" && "$SUBSET_YELP" == "true" ]]; then
   CMD+=" --subset_yelp --subset_size $SUBSET_SIZE"

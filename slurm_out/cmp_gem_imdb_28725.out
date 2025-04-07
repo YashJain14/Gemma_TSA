@@ -1,0 +1,22 @@
+Job started on TC1N06 at Mon Apr  7 03:35:58 PM +08 2025
+Job Name: cmp_gem_imdb
+Job ID: 28725
+Running Command: deepspeed --num_gpus=1 pipeline/compare_transformers.py  --model gemma --dataset imdb --num_epochs 3 --local_rank=-1
+[2025-04-07 15:36:03,013] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 15:36:14,729] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=0 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
+[2025-04-07 15:36:14,729] [INFO] [runner.py:605:main] cmd = /home/UG/yash012/.conda/envs/llm_env/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMF19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None pipeline/compare_transformers.py --model gemma --dataset imdb --num_epochs 3 --local_rank=-1
+[2025-04-07 15:36:16,540] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 15:36:20,450] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0]}
+[2025-04-07 15:36:20,450] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=1, node_rank=0
+[2025-04-07 15:36:20,450] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0]})
+[2025-04-07 15:36:20,450] [INFO] [launch.py:164:main] dist_world_size=1
+[2025-04-07 15:36:20,450] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0
+[2025-04-07 15:36:20,451] [INFO] [launch.py:256:main] process 3193821 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=0', '--model', 'gemma', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1']
+[2025-04-07 15:36:29,416] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+W&B login successful.
+Namespace(dataset='imdb', model='gemma', subset_yelp=False, subset_size=25000, num_epochs=3, local_rank=-1)
+Loading model: google/gemma-2-2b-it
+[2025-04-07 15:36:49,455] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3193821
+[2025-04-07 15:36:49,456] [ERROR] [launch.py:325:sigkill_handler] ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=0', '--model', 'gemma', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1'] exits with return code = 1
+Job finished with exit code 1 at Mon Apr  7 03:36:50 PM +08 2025

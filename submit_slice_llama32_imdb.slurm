@@ -16,6 +16,7 @@ echo "Job Name: ${SLURM_JOB_NAME}" ; echo "Job ID: ${SLURM_JOBID}"
 mkdir -p slurm_out
 module purge ; module load anaconda ; source activate llm_env # Activate env
 export WANDB_API_KEY="75a3e7bc92541ff598fabcf666d5e781e5f84156" # !! EDIT THIS !!
+export HF_TOKEN="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"
 # export WANDB_PROJECT="text-sentiment-analysis-sliced" # Optional
 # export HF_TOKEN="your_hf_token_here" # Optional: If needed
 cd "${SLURM_SUBMIT_DIR}"

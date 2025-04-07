@@ -1,21 +1,21 @@
 import sys, pathlib; sys.path.append(str(pathlib.Path(__file__).parents[1]))
 import argparse
 import wandb
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+import torch
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, BitsAndBytesConfig
 from datasets import load_dataset
 from utils.trainer import CustomTrainer
 from utils.preprocessing import tokenize, train_val_test_split, subset_dataset
 
+# Import PEFT modules for parameter-efficient fine-tuning
+from peft import get_peft_model, LoraConfig, TaskType, prepare_model_for_kbit_training
+
 # Mapping from user-friendly names to Hugging Face model identifiers
 MODEL_MAP = {
     "roberta": "roberta-base",
-    "gemma": "google/gemma-3-1b-it", # Using 2b as 3.1b is PT only
-    "llama3_2": "meta-llama/Llama-3.2-1B" # Using 8B instruct as 1B is not available
-    # Add other models here if needed
+    "gemma": "google/gemma-2-2b-it",  # Use Gemma 2 which is supported
+    "llama3_2": "meta-llama/Llama-3.2-1B"
 }
-# Note: For Llama/Gemma classification, tokenizer padding side might be important
-# If using standard AutoModelForSequenceClassification, it often adds a head
-# that pools outputs. If it relies on the *last* token, left padding is needed.
 
 def main():
     parser = argparse.ArgumentParser(description='Compare Transformer Architectures')
@@ -25,6 +25,12 @@ def main():
     parser.add_argument("--subset_yelp", action='store_true', help='Whether to subset the yelp dataset')
     parser.add_argument("--subset_size", type=int, default=25000, help="Size for subsetting train/val/test")
     parser.add_argument("--num_epochs", type=int, default=3, help="Number of training epochs")
+    parser.add_argument("--max_length", type=int, default=256, help="Max sequence length for tokenization")
+    parser.add_argument("--quantize", choices=['none', '8bit', '4bit'], default='none', 
+                        help="Whether to quantize the model to 8-bit or 4-bit precision")
+    parser.add_argument("--lora_r", type=int, default=16, help="LoRA attention dimension")
+    parser.add_argument("--lora_alpha", type=int, default=32, help="LoRA alpha parameter")
+    parser.add_argument("--lora_dropout", type=float, default=0.1, help="LoRA dropout value")
 
     # for deepspeed
     parser.add_argument("--local_rank", type=int, default=-1, help="Local rank for distributed training")
@@ -41,6 +47,8 @@ def main():
     run_name = f"{args.model}-CompareTransformers-{args.dataset}"
     if args.subset_yelp:
         run_name += f"_subset{args.subset_size}"
+    if args.quantize != 'none':
+        run_name += f"-{args.quantize}-LoRA"
 
     # --- Set up Dataset ---
     input_col_name = "text" # Default
@@ -59,11 +67,73 @@ def main():
         dataset = dataset['train'].train_test_split(test_size=0.1, seed=42)
         dataset['test'] = load_dataset("glue", "sst2")['validation'] # Use original validation as test
     else:
-        raise NotImplementedError
+        raise NotImplementedError(f"Dataset {args.dataset} not supported.")
 
     # --- Set up Model ---
     print(f"Loading model: {model_name}")
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=num_labels)
+
+    # Determine if we need memory optimizations based on model size
+    use_memory_optimization = args.model in ["gemma", "llama3_2"] or args.quantize != 'none'
+    use_lora = args.quantize != 'none'  # Use LoRA when quantizing
+
+    # Configure quantization if requested
+    if args.quantize != 'none':
+        print(f"Applying {args.quantize} quantization for {args.model}")
+        if args.quantize == '8bit':
+            quantization_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+                llm_int8_threshold=6.0,
+                llm_int8_has_fp16_weight=False
+            )
+        elif args.quantize == '4bit':
+            quantization_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_compute_dtype=torch.float16,  # Use float16 for better compatibility
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4"
+            )
+    else:
+        quantization_config = None
+
+    # Load model with quantization if applicable
+    model = AutoModelForSequenceClassification.from_pretrained(
+        model_name, 
+        num_labels=num_labels,
+        quantization_config=quantization_config
+    )
+
+    # Apply LoRA if using quantization
+    if use_lora:
+        print(f"Applying LoRA with r={args.lora_r}, alpha={args.lora_alpha}, dropout={args.lora_dropout}")
+        
+        # Prepare model for k-bit training
+        model = prepare_model_for_kbit_training(model)
+        
+        # Configure LoRA
+        peft_config = LoraConfig(
+            task_type=TaskType.SEQ_CLS,
+            r=args.lora_r,
+            lora_alpha=args.lora_alpha,
+            lora_dropout=args.lora_dropout,
+            target_modules=None,  # Auto-detect target modules
+            bias="none",
+            inference_mode=False,
+        )
+        
+        # Apply LoRA to model
+        model = get_peft_model(model, peft_config)
+        model.print_trainable_parameters()
+
+    # Enable gradient checkpointing after model is created if needed
+    if use_memory_optimization and hasattr(model, "gradient_checkpointing_enable"):
+        print("Enabling gradient checkpointing")
+        model.gradient_checkpointing_enable()
+        
+    # Disable model caching for inference to save memory
+    if use_memory_optimization and hasattr(model.config, "use_cache"):
+        print("Disabling model caching")
+        model.config.use_cache = False
+
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     # --- Handle Padding Token ---
@@ -81,29 +151,20 @@ def main():
             if model.config.pad_token_id is None: # Check if setting worked
                  raise ValueError(f"Could not set pad_token_id for {model_name}")
 
-
     # --- Set Padding Side (Crucial for Causal LMs like Gemma/Llama) ---
-    # AutoModelForSequenceClassification *might* handle this, but explicit is safer
-    # If the classification head uses the last token state, left padding is essential.
     if model.config.model_type in ["llama", "gemma"]:
          print(f"Setting padding side to 'left' for {model.config.model_type}")
          tokenizer.padding_side = 'left'
 
-
     # --- Prepare Dataset ---
-    # Pass tokenizer explicitly to tokenize function
-    tokenized_datasets = tokenize(dataset, tokenizer, input_col_name=input_col_name)
+    tokenized_datasets = tokenize(dataset, tokenizer, input_col_name=input_col_name, max_length=args.max_length)
 
-    # Adjust split function if dataset doesn't have 'test' or 'validation'
     if args.dataset == 'sst2':
-        # We already split 'train' into train/validation and have 'test'
-         train_dataset = tokenized_datasets["train"]
-         val_dataset = tokenized_datasets["test"] # This was the 10% split from train
-         test_dataset = tokenized_datasets["test"] # Original validation split
-         # TODO: Re-tokenize the original validation split if needed
+        train_dataset = tokenized_datasets["train"]
+        val_dataset = tokenized_datasets["test"] # This was the 10% split from train
+        test_dataset = tokenized_datasets["test"] # Original validation split
     else:
         train_dataset, val_dataset, test_dataset = train_val_test_split(tokenized_datasets)
-
 
     if args.dataset =='yelp' and args.subset_yelp:
         print(f"Subsetting Yelp dataset to size: {args.subset_size}")
@@ -115,14 +176,41 @@ def main():
     trainer = CustomTrainer(
         run_name=run_name,
         model=model,
-        tokenizer=tokenizer, # Pass tokenizer to trainer
+        tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        num_train_epochs=args.num_epochs # Pass epochs from args
+        num_train_epochs=args.num_epochs
     )
-
+    
+    # Apply memory optimizations for large models
+    if use_memory_optimization:
+        print(f"Applying memory optimizations for {args.model}")
+        
+        # Set smaller batch size and more gradient accumulation steps for large models
+        if args.quantize == '4bit':
+            # 4-bit allows slightly larger batches
+            trainer.args.per_device_train_batch_size = 2
+            trainer.args.gradient_accumulation_steps = 8
+        else:
+            # More conservative settings for 8-bit or no quantization
+            trainer.args.per_device_train_batch_size = 1
+            trainer.args.gradient_accumulation_steps = 16
+            
+        # Use a larger batch size for evaluation since it uses less memory
+        trainer.args.per_device_eval_batch_size = trainer.args.per_device_train_batch_size * 2
+        
+        # Disable mixed precision when using quantization to avoid compatibility issues
+        if args.quantize != 'none':
+            trainer.args.fp16 = False
+            trainer.args.bf16 = False
+    
+    # Disable finding unused parameters to improve performance
+    if hasattr(trainer.args, "ddp_find_unused_parameters"):
+        trainer.args.ddp_find_unused_parameters = False
+    
     # --- Train ---
-    print("Starting training...")
+    print(f"Starting training with batch size: {trainer.args.per_device_train_batch_size}, " 
+          f"grad accum: {trainer.args.gradient_accumulation_steps}")
     trainer.train()
 
     # --- Evaluate on Test Set ---

@@ -16,6 +16,7 @@ echo "Job Name: ${SLURM_JOB_NAME}" ; echo "Job ID: ${SLURM_JOBID}"
 mkdir -p slurm_out
 module purge ; module load anaconda ; source activate llm_env # Activate env
 export WANDB_API_KEY="75a3e7bc92541ff598fabcf666d5e781e5f84156" # !! EDIT THIS !!
+export HF_TOKEN="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"
 # export WANDB_PROJECT="text-sentiment-analysis-sliced" # Optional
 cd "${SLURM_SUBMIT_DIR}"
 
@@ -24,7 +25,7 @@ EXPERIMENT_TYPE="slice"
 MODEL_KEY="gemma"
 DATASET="imdb"
 PYTHON_SCRIPT="pipeline/gemma.py"
-MODEL_HF_ID="google/gemma-3-1b-it"
+MODEL_HF_ID="google/gemma-2-2b-it"
 DS_CONFIG_FILE="ds_config_gemma.json"
 EXTRA_ARGS=" --model_name $MODEL_HF_ID --dataset $DATASET --ds_config $DS_CONFIG_FILE"
 

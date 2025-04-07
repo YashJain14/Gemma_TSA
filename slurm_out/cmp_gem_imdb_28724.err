@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/UG/yash012/Gemma_TSA/pipeline/compare_transformers.py", line 1, in <module>
+    model = AutoModelForSequenceClassification.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'AutoModelForSequenceClassification' is not defined

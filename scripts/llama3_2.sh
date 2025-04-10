@@ -21,6 +21,8 @@ CMD="deepspeed --include localhost:$GPUS --master_port $MASTER_PORT \
     --model_name $MODEL_NAME \
     --dataset $DATASET \
     --ds_config $DS_CONFIG \
+    --quantize 4bit \
+    --lora_r 16 \
     --local_rank" # local_rank passed automatically
 
 if [[ "$DATASET" == "yelp" && "$SUBSET_YELP" == "true" ]]; then

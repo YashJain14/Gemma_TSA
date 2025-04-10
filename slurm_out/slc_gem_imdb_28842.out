@@ -1,0 +1,145 @@
+Job started on TC1N05 at Mon Apr  7 09:02:24 PM +08 2025
+Job Name: slc_gem_imdb
+Job ID: 28842
+Running Command: deepspeed --num_gpus=12 pipeline/gemma.py  --model_name google/gemma-2-2b-it --dataset imdb --ds_config ds_config_gemma.json --local_rank=-1 
+[2025-04-07 21:02:27,815] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:33,592] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=0 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
+[2025-04-07 21:02:33,593] [INFO] [runner.py:605:main] cmd = /home/UG/yash012/.conda/envs/llm_env/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgMywgNCwgNSwgNiwgNywgOCwgOSwgMTAsIDExXX0= --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None pipeline/gemma.py --model_name google/gemma-2-2b-it --dataset imdb --ds_config ds_config_gemma.json --local_rank=-1
+[2025-04-07 21:02:35,106] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:38,088] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}
+[2025-04-07 21:02:38,088] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=12, node_rank=0
+[2025-04-07 21:02:38,088] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]})
+[2025-04-07 21:02:38,088] [INFO] [launch.py:164:main] dist_world_size=12
+[2025-04-07 21:02:38,088] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8,9,10,11
+[2025-04-07 21:02:38,089] [INFO] [launch.py:256:main] process 3401590 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=0', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,089] [INFO] [launch.py:256:main] process 3401591 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=1', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,097] [INFO] [launch.py:256:main] process 3401592 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=2', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,106] [INFO] [launch.py:256:main] process 3401593 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=3', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,118] [INFO] [launch.py:256:main] process 3401594 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=4', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,140] [INFO] [launch.py:256:main] process 3401595 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=5', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,156] [INFO] [launch.py:256:main] process 3401596 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=6', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,176] [INFO] [launch.py:256:main] process 3401597 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=7', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,198] [INFO] [launch.py:256:main] process 3401598 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=8', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,218] [INFO] [launch.py:256:main] process 3401599 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=9', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,247] [INFO] [launch.py:256:main] process 3401600 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=10', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:38,269] [INFO] [launch.py:256:main] process 3401601 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=11', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1']
+[2025-04-07 21:02:51,146] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,195] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,217] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,274] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,280] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,445] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,446] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,468] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,471] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,495] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,538] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:02:51,544] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+W&B login successful.
+W&B login successful.
+W&B login successful.
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+W&B login successful.
+W&B login successful.
+W&B login successful.
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Namespace(dataset='imdb', subset_yelp=False, subset_size=25000, ds_config='ds_config_gemma.json', val_interval=500, model_name='google/gemma-2-2b-it', local_rank=-1)
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Loading DeepSpeed config from: ds_config_gemma.json
+Loading DeepSpeed config from: ds_config_gemma.json
+Loading DeepSpeed config from: ds_config_gemma.json
+Number of trainable parameters: 119860
+[2025-04-07 21:04:26,019] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:26,019] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:26,019] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+Number of trainable parameters: 119860
+[2025-04-07 21:04:26,021] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:26,021] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:26,021] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+Number of trainable parameters: 119860
+[2025-04-07 21:04:26,022] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:26,022] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:26,023] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+Loading DeepSpeed config from: ds_config_gemma.json
+Number of trainable parameters: 119860
+[2025-04-07 21:04:26,562] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:26,562] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:26,563] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Set padding side to left
+Initializing SlicedGemma with base model: google/gemma-2-2b-it
+Loading DeepSpeed config from: ds_config_gemma.json
+Number of trainable parameters: 119860
+[2025-04-07 21:04:36,027] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:36,027] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:36,027] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+Loading DeepSpeed config from: ds_config_gemma.json
+Number of trainable parameters: 119860
+[2025-04-07 21:04:43,355] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:43,356] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:43,356] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+[2025-04-07 21:04:44,284] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401590
+[2025-04-07 21:04:44,697] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401591
+[2025-04-07 21:04:44,697] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401592
+Loading DeepSpeed config from: ds_config_gemma.json
+Number of trainable parameters: 119860
+[2025-04-07 21:04:47,050] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:47,051] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:47,051] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+[2025-04-07 21:04:47,308] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401593
+[2025-04-07 21:04:49,093] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401594
+Loading DeepSpeed config from: ds_config_gemma.json
+Number of trainable parameters: 119860
+[2025-04-07 21:04:49,897] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:49,897] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:49,897] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+[2025-04-07 21:04:50,774] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401595
+[2025-04-07 21:04:50,799] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401596
+[2025-04-07 21:04:51,048] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401597
+[2025-04-07 21:04:51,745] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401598
+Loading DeepSpeed config from: ds_config_gemma.json
+Number of trainable parameters: 119860
+[2025-04-07 21:04:52,016] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.5, git-hash=unknown, git-branch=unknown
+[2025-04-07 21:04:52,016] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-04-07 21:04:52,016] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 12
+[2025-04-07 21:04:52,121] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401599
+[2025-04-07 21:04:52,393] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401600
+[2025-04-07 21:04:52,579] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3401601
+[2025-04-07 21:04:52,590] [ERROR] [launch.py:325:sigkill_handler] ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=11', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1'] exits with return code = 1
+Job finished with exit code 1 at Mon Apr  7 09:04:53 PM +08 2025

@@ -1,0 +1,32 @@
+Job started on TC1N05 at Mon Apr  7 09:01:12 PM +08 2025
+Job Name: slc_gem_imdb
+Job ID: 28841
+Running Command: deepspeed --num_gpus=4 pipeline/gemma.py  --model_name google/gemma-2-2b-it --dataset imdb --ds_config ds_config_gemma.json --local_rank=-1 --quantize 4bit --lora_r 16
+[2025-04-07 21:01:15,247] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:01:22,263] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=0 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
+[2025-04-07 21:01:22,263] [INFO] [runner.py:605:main] cmd = /home/UG/yash012/.conda/envs/llm_env/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgM119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None pipeline/gemma.py --model_name google/gemma-2-2b-it --dataset imdb --ds_config ds_config_gemma.json --local_rank=-1 --quantize 4bit --lora_r 16
+[2025-04-07 21:01:23,759] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:01:26,733] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3]}
+[2025-04-07 21:01:26,733] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=4, node_rank=0
+[2025-04-07 21:01:26,733] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3]})
+[2025-04-07 21:01:26,733] [INFO] [launch.py:164:main] dist_world_size=4
+[2025-04-07 21:01:26,733] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3
+[2025-04-07 21:01:26,734] [INFO] [launch.py:256:main] process 3400981 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=0', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-07 21:01:26,735] [INFO] [launch.py:256:main] process 3400982 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=1', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-07 21:01:26,741] [INFO] [launch.py:256:main] process 3400983 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=2', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-07 21:01:26,745] [INFO] [launch.py:256:main] process 3400984 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=3', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-07 21:01:31,016] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:01:31,018] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:01:31,084] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-07 21:01:31,092] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+[2025-04-07 21:01:48,751] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3400981
+[2025-04-07 21:01:48,824] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3400982
+[2025-04-07 21:01:48,865] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3400983
+[2025-04-07 21:01:48,875] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 3400984
+[2025-04-07 21:01:48,875] [ERROR] [launch.py:325:sigkill_handler] ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/gemma.py', '--local_rank=3', '--model_name', 'google/gemma-2-2b-it', '--dataset', 'imdb', '--ds_config', 'ds_config_gemma.json', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16'] exits with return code = 2
+Job finished with exit code 2 at Mon Apr  7 09:01:50 PM +08 2025

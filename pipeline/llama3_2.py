@@ -7,7 +7,10 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from datasets import load_dataset
-from transformers import EvalPrediction, AutoTokenizer
+from transformers import EvalPrediction, AutoTokenizer, BitsAndBytesConfig
+
+# Import PEFT modules for parameter-efficient fine-tuning
+from peft import get_peft_model, LoraConfig, TaskType, prepare_model_for_kbit_training
 
 # Import the specific sliced model and its loss function
 from models.SlicedLlama3_2 import SlicedLlama3_2, compute_loss
@@ -25,6 +28,13 @@ def main():
     parser.add_argument("--ds_config", type=str, default="ds_config_llama3_2.json", help="DeepSpeed config file")
     parser.add_argument("--val_interval", type=int, default=500, help="Steps between validation checks")
     parser.add_argument("--model_name", type=str, default=MODEL_NAME, help="Base model identifier")
+    
+    # Add quantization and LoRA parameters
+    parser.add_argument("--quantize", choices=['none', '8bit', '4bit'], default='none', 
+                        help="Whether to quantize the model to 8-bit or 4-bit precision")
+    parser.add_argument("--lora_r", type=int, default=16, help="LoRA attention dimension")
+    parser.add_argument("--lora_alpha", type=int, default=32, help="LoRA alpha parameter")
+    parser.add_argument("--lora_dropout", type=float, default=0.1, help="LoRA dropout value")
 
     # for deepspeed
     parser.add_argument("--local_rank", type=int, default=-1, help="Local rank for distributed training")
@@ -53,17 +63,62 @@ def main():
     tokenizer.padding_side = 'left'
     print(f"Set padding side to left")
 
+    # --- Configure quantization if requested ---
+    if args.quantize != 'none':
+        print(f"Applying {args.quantize} quantization for Llama model")
+        if args.quantize == '8bit':
+            quantization_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+                llm_int8_threshold=6.0,
+                llm_int8_has_fp16_weight=False
+            )
+        elif args.quantize == '4bit':
+            quantization_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_compute_dtype=torch.float16,  # Use float16 for better compatibility
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4"
+            )
+    else:
+        quantization_config = None
 
     # --- Set up Sliced Model ---
     print(f"Initializing SlicedLlama3_2 with base model: {args.model_name}")
     model = SlicedLlama3_2(model_name=args.model_name, num_labels=num_labels)
+    
+    # Apply LoRA if using quantization
+    use_lora = args.quantize != 'none'
+    if use_lora:
+        print(f"Applying LoRA with r={args.lora_r}, alpha={args.lora_alpha}, dropout={args.lora_dropout}")
+        
+        # Prepare model for k-bit training if quantized
+        if quantization_config:
+            model.llama = prepare_model_for_kbit_training(model.llama)
+        
+        # Configure LoRA
+        peft_config = LoraConfig(
+            task_type=TaskType.FEATURE_EXTRACTION,  # We're using it for feature extraction
+            r=args.lora_r,
+            lora_alpha=args.lora_alpha,
+            lora_dropout=args.lora_dropout,
+            bias="none",
+            inference_mode=False,
+        )
+        
+        # Apply LoRA to llama model
+        model.llama = get_peft_model(model.llama, peft_config)
+        
+        # Count trainable parameters
+        trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        all_params = sum(p.numel() for p in model.parameters())
+        print(f"Trainable params: {trainable_params} ({100 * trainable_params / all_params:.2f}% of {all_params})")
 
     # --- DeepSpeed Initialization ---
     print(f"Loading DeepSpeed config from: {args.ds_config}")
     with open(args.ds_config, "r") as f:
         df_config = json.load(f)
 
-    # Filter model parameters to train only classification layers
+    # Filter model parameters to train only classification layers and LoRA parameters
     trainable_params = [p for n, p in model.named_parameters() if p.requires_grad]
     print(f"Number of trainable parameters: {sum(p.numel() for p in trainable_params)}")
 
@@ -96,6 +151,8 @@ def main():
     run_name = f"Sliced-{args.model_name.split('/')[-1]}-{args.dataset}"
     if args.subset_yelp:
          run_name += f"_subset{args.subset_size}"
+    if args.quantize != 'none':
+        run_name += f"-{args.quantize}-LoRA"
 
     if model_engine.global_rank == 0:
         wandb.init(

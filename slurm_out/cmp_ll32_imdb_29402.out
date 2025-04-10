@@ -1,0 +1,186 @@
+Job started on TC1N04 at Wed Apr  9 05:18:16 PM +08 2025
+Job Name: cmp_ll32_imdb
+Job ID: 29402
+Running Command: deepspeed --num_gpus=10 pipeline/compare_transformers.py  --model llama3_2 --dataset imdb --num_epochs 3 --local_rank=-1 --quantize 4bit --lora_r 16
+[2025-04-09 17:18:40,306] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:19:14,018] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=0 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
+[2025-04-09 17:19:14,018] [INFO] [runner.py:605:main] cmd = /home/UG/yash012/.conda/envs/llm_env/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgMywgNCwgNSwgNiwgNywgOCwgOV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None pipeline/compare_transformers.py --model llama3_2 --dataset imdb --num_epochs 3 --local_rank=-1 --quantize 4bit --lora_r 16
+[2025-04-09 17:19:17,177] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:19:22,849] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+[2025-04-09 17:19:22,849] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=10, node_rank=0
+[2025-04-09 17:19:22,849] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]})
+[2025-04-09 17:19:22,849] [INFO] [launch.py:164:main] dist_world_size=10
+[2025-04-09 17:19:22,849] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8,9
+[2025-04-09 17:19:22,850] [INFO] [launch.py:256:main] process 384854 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=0', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,851] [INFO] [launch.py:256:main] process 384855 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=1', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,858] [INFO] [launch.py:256:main] process 384856 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=2', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,860] [INFO] [launch.py:256:main] process 384857 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=3', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,870] [INFO] [launch.py:256:main] process 384858 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=4', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,874] [INFO] [launch.py:256:main] process 384859 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=5', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,884] [INFO] [launch.py:256:main] process 384860 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=6', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,918] [INFO] [launch.py:256:main] process 384861 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=7', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,936] [INFO] [launch.py:256:main] process 384862 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=8', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:19:22,953] [INFO] [launch.py:256:main] process 384863 spawned with command: ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=9', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16']
+[2025-04-09 17:20:10,027] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,031] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,042] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,068] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,091] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,103] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,118] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,122] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,122] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-04-09 17:20:10,123] [INFO] [real_accelerator.py:239:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+W&B login successful.
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)Namespace(dataset='imdb', model='llama3_2', subset_yelp=False, subset_size=25000, num_epochs=3, max_length=256, quantize='4bit', lora_r=16, lora_alpha=32, lora_dropout=0.1, local_rank=-1)
+
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Loading model: meta-llama/Llama-3.2-1B
+Applying 4bit quantization for llama3_2
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+Applying LoRA with r=16, alpha=32, dropout=0.1
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+Disabling model caching
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+Disabling model caching
+Disabling model caching
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+Disabling model caching
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+Disabling model caching
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+Disabling model caching
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+Disabling model caching
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+trainable params: 1,708,032 || all params: 1,237,526,528 || trainable%: 0.1380
+Enabling gradient checkpointing
+Disabling model caching
+Disabling model caching
+Disabling model caching
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Setting pad_token to eos_token
+Setting padding side to 'left' for llama
+Tokenizing column 'text' with tokenizer 'meta-llama/Llama-3.2-1B' (padding_side='left')
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Columns after tokenization: ['text', 'label', 'input_ids', 'attention_mask']
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+Applying memory optimizations for llama3_2
+Starting training with batch size: 2, grad accum: 8
+[2025-04-09 17:36:27,092] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384854
+[2025-04-09 17:36:27,109] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384855
+[2025-04-09 17:36:27,137] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384856
+[2025-04-09 17:36:27,152] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384857
+[2025-04-09 17:36:27,165] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384858
+[2025-04-09 17:36:27,228] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384859
+[2025-04-09 17:36:27,237] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384860
+[2025-04-09 17:36:27,245] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384861
+[2025-04-09 17:36:27,254] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384862
+[2025-04-09 17:36:27,254] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 384863
+[2025-04-09 17:36:27,262] [ERROR] [launch.py:325:sigkill_handler] ['/home/UG/yash012/.conda/envs/llm_env/bin/python', '-u', 'pipeline/compare_transformers.py', '--local_rank=9', '--model', 'llama3_2', '--dataset', 'imdb', '--num_epochs', '3', '--local_rank=-1', '--quantize', '4bit', '--lora_r', '16'] exits with return code = 1
+Job finished with exit code 1 at Wed Apr  9 05:36:28 PM +08 2025

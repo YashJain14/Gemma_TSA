@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/UG/yash012/.conda/envs/llm_env/bin/deepspeed", line 3, in <module>
+    from deepspeed.launcher.runner import main
+  File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/ops/__init__.py", line 15, in <module>
+    from ..git_version_info import compatible_ops as __compatible_ops__
+  File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/git_version_info.py", line 29, in <module>
+    op_compatible = builder.is_compatible()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/ops/op_builder/fp_quantizer.py", line 35, in is_compatible
+    sys_cuda_major, _ = installed_cuda_version()
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/ops/op_builder/builder.py", line 51, in installed_cuda_version
+    raise MissingCUDAException("CUDA_HOME does not exist, unable to compile CUDA op(s)")
+deepspeed.ops.op_builder.builder.MissingCUDAException: CUDA_HOME does not exist, unable to compile CUDA op(s)

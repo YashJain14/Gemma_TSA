@@ -1,0 +1,192 @@
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: yashjain14 (yashjain14-nanyang-technological-university-singapore) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:24<00:24, 24.67s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:27<00:27, 27.39s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:24<00:24, 24.15s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:23<00:23, 23.80s/it]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:29<00:00, 12.43s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:29<00:00, 14.67s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:26<00:00, 11.29s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:26<00:00, 13.32s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:26<00:00, 11.10s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:26<00:00, 13.06s/it]
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank1]:     main()
+[rank1]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank1]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank1]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank1]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank1]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank1]:     self._configure_train_batch_size()
+[rank1]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank1]:     self._batch_assertion()
+[rank1]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank1]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank1]:             ^^^^^^^^^^^^^^^
+[rank1]: TypeError: '>' not supported between instances of 'str' and 'int'
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank5]:     main()
+[rank5]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank5]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank5]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank5]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank5]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank5]:     self._configure_train_batch_size()
+[rank5]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank5]:     self._batch_assertion()
+[rank5]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank5]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank5]:             ^^^^^^^^^^^^^^^
+[rank5]: TypeError: '>' not supported between instances of 'str' and 'int'
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank0]:     main()
+[rank0]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank0]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank0]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank0]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank0]:     self._configure_train_batch_size()
+[rank0]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank0]:     self._batch_assertion()
+[rank0]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank0]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank0]:             ^^^^^^^^^^^^^^^
+[rank0]: TypeError: '>' not supported between instances of 'str' and 'int'
+Loading checkpoint shards: 100%|██████████| 2/2 [00:25<00:00, 10.55s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:25<00:00, 12.54s/it]
+[rank11]: Traceback (most recent call last):
+[rank11]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank11]:     main()
+[rank11]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank11]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank11]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank11]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank11]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank11]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank11]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank11]:     self._configure_train_batch_size()
+[rank11]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank11]:     self._batch_assertion()
+[rank11]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank11]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank11]:             ^^^^^^^^^^^^^^^
+[rank11]: TypeError: '>' not supported between instances of 'str' and 'int'
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s][rank0]:[W407 21:04:32.785132872 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+[rank1]:[W407 21:04:32.811209568 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+[rank5]:[W407 21:04:32.029280366 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+[rank11]:[W407 21:04:32.163706902 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+Loading checkpoint shards:  50%|█████     | 1/2 [00:26<00:26, 26.99s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:28<00:00, 11.98s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:28<00:00, 14.23s/it]
+[rank6]: Traceback (most recent call last):
+[rank6]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank6]:     main()
+[rank6]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank6]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank6]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank6]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank6]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank6]:     self._configure_train_batch_size()
+[rank6]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank6]:     self._batch_assertion()
+[rank6]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank6]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank6]:             ^^^^^^^^^^^^^^^
+[rank6]: TypeError: '>' not supported between instances of 'str' and 'int'
+Loading checkpoint shards:  50%|█████     | 1/2 [00:28<00:28, 28.34s/it][rank6]:[W407 21:04:43.459241725 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+Loading checkpoint shards: 100%|██████████| 2/2 [00:29<00:00, 12.31s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:29<00:00, 14.72s/it]
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank2]:     main()
+[rank2]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank2]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank2]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank2]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank2]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank2]:     self._configure_train_batch_size()
+[rank2]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank2]:     self._batch_assertion()
+[rank2]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank2]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank2]:             ^^^^^^^^^^^^^^^
+[rank2]: TypeError: '>' not supported between instances of 'str' and 'int'
+Loading checkpoint shards:  50%|█████     | 1/2 [00:27<00:27, 27.82s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:26<00:26, 26.67s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:28<00:00, 11.93s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:28<00:00, 14.31s/it]
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank4]:     main()
+[rank4]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank4]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank4]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank4]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank4]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank4]:     self._configure_train_batch_size()
+[rank4]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank4]:     self._batch_assertion()
+[rank4]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank4]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank4]:             ^^^^^^^^^^^^^^^
+[rank4]: TypeError: '>' not supported between instances of 'str' and 'int'
+Loading checkpoint shards:  50%|█████     | 1/2 [00:23<00:23, 23.41s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:24<00:00, 10.00s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:24<00:00, 12.01s/it]
+[rank10]: Traceback (most recent call last):
+[rank10]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank10]:     main()
+[rank10]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank10]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank10]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank10]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank10]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank10]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank10]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank10]:     self._configure_train_batch_size()
+[rank10]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank10]:     self._batch_assertion()
+[rank10]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank10]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank10]:             ^^^^^^^^^^^^^^^
+[rank10]: TypeError: '>' not supported between instances of 'str' and 'int'
+Loading checkpoint shards:  50%|█████     | 1/2 [00:21<00:21, 21.66s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:20<00:20, 20.02s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:19<00:19, 19.33s/it][rank10]:[W407 21:04:51.197124789 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+Loading checkpoint shards: 100%|██████████| 2/2 [00:19<00:00,  8.14s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:19<00:00,  9.82s/it]
+[rank9]: Traceback (most recent call last):
+[rank9]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 219, in <module>
+[rank9]:     main()
+[rank9]:   File "/home/UG/yash012/Gemma_TSA/pipeline/gemma.py", line 70, in main
+[rank9]:     model_engine, optimizer, _, _ = deepspeed.initialize(
+[rank9]:                                     ^^^^^^^^^^^^^^^^^^^^^
+[rank9]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/__init__.py", line 179, in initialize
+[rank9]:     config_class = DeepSpeedConfig(config, mpu, mesh_device=mesh_device)
+[rank9]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank9]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 799, in __init__
+[rank9]:     self._configure_train_batch_size()
+[rank9]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 982, in _configure_train_batch_size
+[rank9]:     self._batch_assertion()
+[rank9]:   File "/home/UG/yash012/.conda/envs/llm_env/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 926, in _batch_assertion
+[rank9]:     assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+[rank9]:             ^^^^^^^^^^^^^^^
+[rank9]: TypeError: '>' not supported between instances of 'str' and 'int'

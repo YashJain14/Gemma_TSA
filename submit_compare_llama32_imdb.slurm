@@ -30,7 +30,7 @@ PYTHON_SCRIPT="pipeline/compare_transformers.py"
 EXTRA_ARGS=" --model $MODEL_KEY --dataset $DATASET --num_epochs 3"
 
 # --- Construct and Run DeepSpeed Command ---
-CMD="deepspeed --num_gpus=1 ${PYTHON_SCRIPT} ${EXTRA_ARGS} --local_rank=-1"
+CMD="deepspeed --num_gpus=10 ${PYTHON_SCRIPT} ${EXTRA_ARGS} --local_rank=-1 --quantize 4bit --lora_r 16"
 echo "Running Command: $CMD"
 eval $CMD
 EXIT_CODE=$?

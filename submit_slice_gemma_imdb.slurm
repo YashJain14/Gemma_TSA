@@ -15,6 +15,7 @@ echo "Job started on $(hostname) at $(date)"
 echo "Job Name: ${SLURM_JOB_NAME}" ; echo "Job ID: ${SLURM_JOBID}"
 mkdir -p slurm_out
 module purge ; module load anaconda ; source activate llm_env # Activate env
+module load cuda/11.8
 export WANDB_API_KEY="75a3e7bc92541ff598fabcf666d5e781e5f84156" # !! EDIT THIS !!
 export HF_TOKEN="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"
 # export WANDB_PROJECT="text-sentiment-analysis-sliced" # Optional
@@ -30,7 +31,7 @@ DS_CONFIG_FILE="ds_config_gemma.json"
 EXTRA_ARGS=" --model_name $MODEL_HF_ID --dataset $DATASET --ds_config $DS_CONFIG_FILE"
 
 # --- Construct and Run DeepSpeed Command ---
-CMD="deepspeed --num_gpus=1 ${PYTHON_SCRIPT} ${EXTRA_ARGS} --local_rank=-1"
+CMD="deepspeed --num_gpus=12 ${PYTHON_SCRIPT} ${EXTRA_ARGS} --local_rank=-1 "
 echo "Running Command: $CMD"
 eval $CMD
 EXIT_CODE=$?
